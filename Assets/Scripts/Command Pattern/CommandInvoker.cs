@@ -9,6 +9,10 @@ public class CommandInvoker : MonoBehaviour
     static List<ICommand> commandHistory;
     static int counter;
 
+    static Queue<IActivity> commandBuffer2;
+
+    static List<IActivity> commandHistory2;
+
     private void Awake() 
     {
         commandBuffer = new Queue<ICommand>();
@@ -23,6 +27,16 @@ public class CommandInvoker : MonoBehaviour
         }
         
         commandBuffer.Enqueue(command);
+    }
+
+    public static void AddCommand2(IActivity command2)
+    {
+        while (commandHistory2.Count > counter)
+        {
+            commandHistory2.RemoveAt(counter);
+        }
+
+        commandBuffer2.Enqueue(command2);
     }
 
     // Update is called once per frame
@@ -54,6 +68,29 @@ public class CommandInvoker : MonoBehaviour
                 if (counter < commandHistory.Count)
                 {
                     commandHistory[counter].Execute();
+                    counter++;
+                }
+            }
+        }
+
+        if (commandBuffer2.Count > 0)
+        {
+            IActivity d = commandBuffer2.Dequeue();
+            d.Execute();
+
+            //commandBuffer2.Dequeue().Execute();
+
+            commandHistory2.Add(d);
+            counter++;
+            Debug.Log("Command history length: " + commandHistory2.Count);
+        }
+        else
+        {
+             if (Input.GetKeyDown(KeyCode.R))
+            {           
+                if (counter < commandHistory2.Count)
+                {
+                    commandHistory2[counter].Execute();
                     counter++;
                 }
             }
