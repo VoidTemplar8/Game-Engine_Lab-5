@@ -12,6 +12,7 @@ public class CommandInvoker : MonoBehaviour
     static Queue<IActivity> commandBuffer2;
 
     static List<IActivity> commandHistory2;
+    static int counter2;
 
     private void Awake() 
     {
@@ -31,9 +32,9 @@ public class CommandInvoker : MonoBehaviour
 
     public static void AddCommand2(IActivity command2)
     {
-        while (commandHistory2.Count > counter)
+        while (commandHistory2.Count > counter2)
         {
-            commandHistory2.RemoveAt(counter);
+            commandHistory2.RemoveAt(counter2);
         }
 
         commandBuffer2.Enqueue(command2);
@@ -81,17 +82,17 @@ public class CommandInvoker : MonoBehaviour
             //commandBuffer2.Dequeue().Execute();
 
             commandHistory2.Add(d);
-            counter++;
+            counter2++;
             Debug.Log("Command history length: " + commandHistory2.Count);
         }
         else
         {
              if (Input.GetKeyDown(KeyCode.R))
             {           
-                if (counter < commandHistory2.Count)
+                if (counter2 < commandHistory2.Count)
                 {
                     commandHistory2[counter].Execute();
-                    counter++;
+                    counter2++;
                 }
             }
         }
